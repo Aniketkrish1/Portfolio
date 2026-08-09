@@ -85,11 +85,11 @@ export default function Hero() {
             </motion.div>
 
             <motion.div variants={itemVariants} className="font-mono text-sm text-[#3ecf8e] font-semibold tracking-wide mb-6">
-              Specialized in LLM Pipelines, Computer Vision & Agentic Systems
+              Specialized in Backend Infrastructure, LLM Pipelines & Agentic Systems
             </motion.div>
             
             <motion.div variants={itemVariants} className="text-base sm:text-lg text-[#8a8a8e] leading-relaxed max-w-lg mb-8">
-              Engineering production-grade AI systems, multimodal signal pipelines, and high-performance backend infrastructure.
+              Engineering production-grade AI systems, high-performance backend APIs, and multimodal signal pipelines.
             </motion.div>
             
             <motion.div variants={ctaVariants} className="flex flex-wrap items-center gap-3">

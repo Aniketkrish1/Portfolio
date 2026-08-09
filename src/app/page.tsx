@@ -19,6 +19,7 @@ import Footer from '@/components/Footer';
 import BackgroundNetwork from '@/components/ui/BackgroundNetwork';
 import TrainEasterEgg from '@/components/ui/TrainEasterEgg';
 import CommandPalette from '@/components/ui/CommandPalette';
+import SectionLabel from '@/components/ui/SectionLabel';
 import { projects } from '@/lib/data/projects';
 
 export default function Home() {

@@ -51,7 +51,7 @@ export function TechnicalEcosystem() {
     <section id="systems" className="py-16 lg:py-20">
       <Container>
         <Reveal>
-          <SectionLabel number="03" label="Technical Ecosystem" />
+          <SectionLabel label="Technical Ecosystem" />
           <h2 className="font-display text-3xl sm:text-4xl font-bold text-[#f0ece5] mt-4 mb-10">
             Technologies I Work With
           </h2>

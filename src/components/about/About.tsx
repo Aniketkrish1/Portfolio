@@ -10,7 +10,7 @@ export function About() {
       <Container>
         <div className="max-w-3xl mx-auto">
           <Reveal>
-            <SectionLabel number="08" label="About" />
+            <SectionLabel label="About" />
             <h2 className="font-display text-2xl sm:text-3xl text-[#f0ece5] leading-relaxed mt-6 mb-8">
               "I like understanding what happens between an idea and a production system."
             </h2>
