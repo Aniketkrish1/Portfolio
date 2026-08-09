@@ -1,5 +1,6 @@
 'use client';
 
+import React, { useState } from 'react';
 import { SectionLabel } from '@/components/ui/SectionLabel';
 import { Reveal } from '@/components/ui/Reveal';
 import { Container } from '@/components/ui/Container';
@@ -23,12 +24,34 @@ const ecosystems = [
   }
 ];
 
+// Map related technology clusters
+const RELATED_MAP: Record<string, string[]> = {
+  LLMs: ['RAG', 'Agentic AI', 'Transformers', 'FastAPI', 'Vector Databases', 'PostgreSQL'],
+  RAG: ['LLMs', 'Agentic AI', 'Vector Databases', 'FastAPI', 'PostgreSQL'],
+  'Agentic AI': ['LLMs', 'RAG', 'Pydantic', 'FastAPI', 'Vector Databases'],
+  Transformers: ['LLMs', 'PyTorch', 'TensorFlow', 'Scikit-learn'],
+  PyTorch: ['Transformers', 'TensorFlow', 'OpenCV', 'MediaPipe'],
+  OpenCV: ['MediaPipe', 'PaddleOCR', 'Azure OCR', 'PyTorch'],
+  FastAPI: ['Next.js', 'Pydantic', 'Docker', 'PostgreSQL', 'LLMs'],
+  PostgreSQL: ['FastAPI', 'MySQL', 'MongoDB', 'Vector Databases'],
+  'Vector Databases': ['LLMs', 'RAG', 'FastAPI', 'PostgreSQL'],
+};
+
 export function TechnicalEcosystem() {
+  const [hoveredTech, setHoveredTech] = useState<string | null>(null);
+
+  const isRelated = (tech: string) => {
+    if (!hoveredTech) return true;
+    if (tech === hoveredTech) return true;
+    const relatedList = RELATED_MAP[hoveredTech] || [];
+    return relatedList.includes(tech);
+  };
+
   return (
     <section id="systems" className="py-16 lg:py-20">
       <Container>
         <Reveal>
-          <SectionLabel number="05" label="Technical Ecosystem" />
+          <SectionLabel number="03" label="Technical Ecosystem" />
           <h2 className="font-display text-3xl sm:text-4xl font-bold text-[#f0ece5] mt-4 mb-10">
             Technologies I Work With
           </h2>
@@ -41,14 +64,27 @@ export function TechnicalEcosystem() {
                   {eco.category}
                 </h3>
                 <div className="flex flex-wrap gap-2.5">
-                  {eco.technologies.map((tech) => (
-                    <span
-                      key={tech}
-                      className="font-mono text-xs text-[#a1a1a6] px-3.5 py-1.5 bg-[#1a1a1d] border border-[#26262b] rounded-md hover:border-[#3ecf8e] hover:text-[#f0ece5] transition-all duration-200 cursor-default"
-                    >
-                      {tech}
-                    </span>
-                  ))}
+                  {eco.technologies.map((tech) => {
+                    const active = isRelated(tech);
+                    const isSelf = hoveredTech === tech;
+
+                    return (
+                      <span
+                        key={tech}
+                        onMouseEnter={() => setHoveredTech(tech)}
+                        onMouseLeave={() => setHoveredTech(null)}
+                        className={`font-mono text-xs px-3.5 py-1.5 bg-[#1a1a1d] border rounded-md transition-all duration-300 cursor-default ${
+                          isSelf
+                            ? 'border-[#3ecf8e] text-[#f0ece5] bg-[#3ecf8e]/10 shadow-[0_0_12px_rgba(62,207,142,0.3)] scale-105'
+                            : active
+                            ? 'border-[#3ecf8e]/40 text-[#f0ece5] opacity-100'
+                            : 'border-[#26262b] text-[#8a8a8e] opacity-35'
+                        }`}
+                      >
+                        {tech}
+                      </span>
+                    );
+                  })}
                 </div>
               </div>
             ))}
