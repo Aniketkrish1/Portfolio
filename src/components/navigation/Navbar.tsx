@@ -4,14 +4,14 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const NAV_LINKS = [
-  { id: 'work', label: '01. Work' },
-  { id: 'systems', label: '02. Systems' },
-  { id: 'about', label: '03. About' },
+  { id: 'experience', label: '01. Experience' },
+  { id: 'work', label: '02. Systems' },
+  { id: 'systems', label: '03. Ecosystem' },
   { id: 'contact', label: '04. Contact' },
 ];
 
 const GITHUB_URL = 'https://github.com/Aniketkrish1';
-const LINKEDIN_URL = 'https://linkedin.com/in/aniketpatil11';
+const LINKEDIN_URL = 'https://linkedin.com/in/aniketkrish1';
 
 export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);

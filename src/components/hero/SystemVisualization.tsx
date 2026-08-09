@@ -131,9 +131,6 @@ export default function SystemVisualization() {
           <span className="w-2 h-2 rounded-full bg-[#3ecf8e] animate-ping" />
           AI SYSTEMS PIPELINE
         </div>
-        <span className="font-mono text-[10px] text-[#555558] tracking-wider hidden sm:block">
-          INFINITE DATA STREAM
-        </span>
       </div>
 
       {/* Infinite Horizontal Scroll Container */}

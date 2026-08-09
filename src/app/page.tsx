@@ -37,6 +37,9 @@ export default function Home() {
         <MetricStrip />
       </section>
 
+      {/* Experience & Credentials */}
+      <ExperienceTimeline />
+
       {/* Featured Systems (Work) */}
       <section id="work" className="space-y-0">
         {/* Project 01: VidBrain */}
@@ -112,9 +115,6 @@ export default function Home() {
 
       {/* Technical Ecosystem (Systems) */}
       <TechnicalEcosystem />
-
-      {/* Experience & Education */}
-      <ExperienceTimeline />
 
       {/* About */}
       <About />
