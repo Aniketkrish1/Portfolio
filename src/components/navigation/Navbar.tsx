@@ -4,10 +4,10 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const NAV_LINKS = [
-  { id: 'experience', label: '01. Experience' },
-  { id: 'work', label: '02. Systems' },
-  { id: 'systems', label: '03. Ecosystem' },
-  { id: 'contact', label: '04. Contact' },
+  { id: 'experience', label: 'Experience' },
+  { id: 'work', label: 'Systems' },
+  { id: 'systems', label: 'Ecosystem' },
+  { id: 'contact', label: 'Contact' },
 ];
 
 const GITHUB_URL = 'https://github.com/Aniketkrish1';

@@ -39,7 +39,7 @@ export default function EngineeringProcess() {
   return (
     <section className="py-16 lg:py-20 bg-[#0a0a0b]">
       <Container>
-        <SectionLabel number="04" label="Philosophy" />
+        <SectionLabel label="Philosophy" />
 
         <div className="mt-10 mb-16">
           <Reveal>
