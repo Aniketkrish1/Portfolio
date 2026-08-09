@@ -18,7 +18,7 @@ export function About() {
               I'm an AI/ML engineer focused on building systems that work — not just models that run. My work spans LLMs, retrieval-augmented generation, computer vision, OCR pipelines, and backend infrastructure. I care about the full path from raw signal to deployed intelligence.
             </p>
             <p className="text-[#555558] text-sm mt-4">
-              Currently pursuing B.E. in AI & ML at Bangalore Institute of Technology, while building production systems as a freelance developer.
+              Graduated with a B.E. in AI & ML from Bangalore Institute of Technology, building production-grade systems as a freelance developer.
             </p>
           </Reveal>
         </div>
