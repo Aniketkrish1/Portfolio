@@ -11,7 +11,7 @@ const NAV_LINKS = [
 ];
 
 const GITHUB_URL = 'https://github.com/Aniketkrish1';
-const LINKEDIN_URL = 'https://linkedin.com/in/aniketkrish1';
+const LINKEDIN_URL = 'https://www.linkedin.com/in/aniketpatil11';
 
 export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);

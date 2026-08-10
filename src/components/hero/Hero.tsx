@@ -113,7 +113,7 @@ export default function Hero() {
                 GitHub
               </a>
               <a 
-                href="https://linkedin.com/in/aniketkrish1"
+                href="https://www.linkedin.com/in/aniketpatil11"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 border border-[#1f1f23] text-[#8a8a8e] px-4 py-2.5 text-xs font-mono rounded-sm hover:border-[#3ecf8e] hover:text-[#f0ece5] transition-colors"
