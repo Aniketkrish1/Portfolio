@@ -11,7 +11,7 @@ export function Footer() {
           
           <div className="flex flex-wrap justify-center gap-6 font-mono text-xs text-[#555558]">
             <a href="https://github.com/Aniketkrish1" target="_blank" rel="noopener noreferrer" className="hover:text-[#8a8a8e] transition-colors">GitHub</a>
-            <a href="https://linkedin.com/in/aniketpatil11" target="_blank" rel="noopener noreferrer" className="hover:text-[#8a8a8e] transition-colors">LinkedIn</a>
+            <a href="https://www.linkedin.com/in/aniketpatil11" target="_blank" rel="noopener noreferrer" className="hover:text-[#8a8a8e] transition-colors">LinkedIn</a>
             <a href="https://leetcode.com/u/aniketkrish11" target="_blank" rel="noopener noreferrer" className="hover:text-[#8a8a8e] transition-colors">LeetCode</a>
             <a href="mailto:aniketpatilkrish11@gmail.com" className="hover:text-[#8a8a8e] transition-colors">Email</a>
           </div>
