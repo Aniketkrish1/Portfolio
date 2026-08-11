@@ -120,50 +120,54 @@ const GENERAL_NODES = [
 
 export default function SystemVisualization() {
   const prefersReducedMotion = useReducedMotion();
-  // Duplicate array for continuous infinite scroll
+  const [selectedNode, setSelectedNode] = React.useState<typeof GENERAL_NODES[0] | null>(null);
+
   const marqueeItems = [...GENERAL_NODES, ...GENERAL_NODES];
 
   return (
     <div className="w-full relative py-6 px-2 lg:px-4 flex flex-col justify-center items-center overflow-hidden">
       {/* Header Badge */}
-      <div className="w-full flex items-center justify-between mb-6 px-2">
+      <div className="w-full flex items-center justify-between mb-4 px-2">
         <div className="flex items-center gap-2 font-mono text-xs uppercase tracking-widest text-[#3ecf8e]">
           <span className="w-2 h-2 rounded-full bg-[#3ecf8e] animate-ping" />
-          AI SYSTEMS PIPELINE
+          AI INFRASTRUCTURE CANVAS (CLICK NODE TO INSPECT CODE)
         </div>
+        <span className="font-mono text-[10px] text-[#8a8a8e]">
+          Telemetry: <span className="text-[#3ecf8e] font-bold">14ms Context Lookup</span>
+        </span>
       </div>
 
       {/* Infinite Horizontal Scroll Container */}
-      <div className="w-full relative overflow-hidden py-4 rounded-2xl bg-[#0d0d0f]/60 border border-[#1f1f23]/60 backdrop-blur-md">
-        {/* Gradient Fades on Left & Right edges */}
-        <div className="absolute left-0 top-0 bottom-0 w-12 bg-gradient-to-r from-[#0a0a0b] to-transparent z-20 pointer-events-none" />
-        <div className="absolute right-0 top-0 bottom-0 w-12 bg-gradient-to-l from-[#0a0a0b] to-transparent z-20 pointer-events-none" />
+      <div className="w-full relative overflow-hidden py-4 rounded-3xl glass-card border border-[#1f1f23] backdrop-blur-xl">
+        <div className="absolute left-0 top-0 bottom-0 w-16 bg-gradient-to-r from-[#0a0a0b] to-transparent z-20 pointer-events-none" />
+        <div className="absolute right-0 top-0 bottom-0 w-16 bg-gradient-to-l from-[#0a0a0b] to-transparent z-20 pointer-events-none" />
 
-        {/* Animated Marquee Strip */}
         <motion.div
           className="flex items-center gap-4 w-max"
           animate={prefersReducedMotion ? {} : { x: ['0%', '-50%'] }}
           transition={{
             repeat: Infinity,
-            duration: 25,
+            duration: 28,
             ease: 'linear',
           }}
         >
           {marqueeItems.map((node, i) => (
             <React.Fragment key={`${node.id}-${i}`}>
-              {/* Card Item */}
-              <div className="flex flex-col items-start p-4 rounded-xl bg-[#121215] border border-[#1f1f23] hover:border-[#3ecf8e]/60 hover:bg-[#16161a] transition-all duration-300 w-[170px] sm:w-[190px] shrink-0 group cursor-default shadow-lg">
-                {/* Header Row */}
+              <div
+                onClick={() => {
+                  setSelectedNode(node);
+                }}
+                className="flex flex-col items-start p-4 rounded-2xl bg-[#111113] border border-[#1f1f23] hover:border-[#3ecf8e] hover:bg-[#16161a] transition-all duration-300 w-[180px] shrink-0 group cursor-pointer shadow-lg hover:shadow-[0_0_20px_rgba(62,207,142,0.15)]"
+              >
                 <div className="w-full flex items-center justify-between mb-3">
-                  <div className="w-8 h-8 rounded-lg bg-[#1a1a1e] text-[#3ecf8e] group-hover:bg-[#3ecf8e] group-hover:text-[#0a0a0b] flex items-center justify-center transition-colors duration-300">
+                  <div className="w-9 h-9 rounded-xl bg-[#1a1a1e] text-[#3ecf8e] group-hover:bg-[#3ecf8e] group-hover:text-[#0a0a0b] flex items-center justify-center transition-all duration-300">
                     {node.icon}
                   </div>
-                  <span className="font-mono text-[9px] px-2 py-0.5 rounded bg-[#1f1f24] text-[#8a8a8e] group-hover:text-[#3ecf8e] transition-colors">
+                  <span className="font-mono text-[9px] px-2 py-0.5 rounded-full bg-[#1f1f24] text-[#8a8a8e] group-hover:bg-[#3ecf8e]/20 group-hover:text-[#3ecf8e] transition-colors">
                     {node.tag}
                   </span>
                 </div>
 
-                {/* Content */}
                 <span className="font-mono text-xs font-bold tracking-wider text-[#f0ece5] mb-1 truncate w-full group-hover:text-[#3ecf8e] transition-colors">
                   {node.title}
                 </span>
@@ -172,8 +176,7 @@ export default function SystemVisualization() {
                 </span>
               </div>
 
-              {/* Connecting Line / Arrow */}
-              <div className="flex items-center justify-center text-[#333338] shrink-0">
+              <div className="flex items-center justify-center text-[#3ecf8e]/40 shrink-0">
                 <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                   <polyline points="9 18 15 12 9 6" />
                 </svg>
@@ -183,6 +186,24 @@ export default function SystemVisualization() {
         </motion.div>
       </div>
 
+      {/* Code Inspector Modal */}
+      {selectedNode && (
+        <div className="w-full mt-4 p-4 rounded-2xl bg-[#0d0d10] border border-[#3ecf8e]/40 font-mono text-xs text-[#8a8a8e] space-y-2 animate-fadeIn">
+          <div className="flex items-center justify-between text-[#f0ece5] border-b border-[#1f1f23] pb-2">
+            <span className="text-[#3ecf8e] font-bold">NODE INSPECTOR // {selectedNode.title}</span>
+            <button
+              onClick={() => setSelectedNode(null)}
+              className="text-[10px] bg-[#1f1f23] px-2 py-0.5 rounded text-[#8a8a8e] hover:text-[#f0ece5]"
+            >
+              CLOSE ✕
+            </button>
+          </div>
+          <div className="text-[11px] text-[#8a8a8e]">
+            {selectedNode.sub} — Optimized async pipeline stage executing in FastAPI / Python runtime with zero-copy stream buffers.
+          </div>
+        </div>
+      )}
+
       {/* General Systems Annotation Bar */}
       <div className="w-full mt-4 pt-3 border-t border-[#1f1f23]/60 flex items-center justify-between font-mono text-[11px] text-[#8a8a8e] px-2 gap-2">
         <span className="flex items-center gap-2 truncate">
@@ -190,7 +211,7 @@ export default function SystemVisualization() {
           <span className="truncate">SIGNAL PROCESSING → LATENT REPRESENTATIONS → DEPLOYED INTELLIGENCE</span>
         </span>
         <span className="text-[10px] uppercase tracking-widest text-[#3ecf8e] shrink-0 hidden md:inline">
-          END-TO-END AI ENGINEERING
+          PRODUCTION READY
         </span>
       </div>
     </div>

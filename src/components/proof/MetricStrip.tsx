@@ -54,34 +54,50 @@ function AnimatedNumber({ value, suffix, delay }: { value: number | string; suff
 
 export default function MetricStrip() {
   const metrics: Omit<MetricProps, 'delay'>[] = [
-    { value: 5, suffix: '×', label: 'OCR Processing Improvement', sublabel: '15s → 3s' },
-    { value: 92, suffix: '%', label: 'Skeleton Extraction Accuracy' },
-    { value: 30, suffix: '%', label: 'Reduction in Manual Analysis' },
-    { value: 'RAG', label: 'Production AI System' }
+    { value: 5, suffix: '×', label: 'OCR Processing Speedup', sublabel: '15s → 3s Optimization' },
+    { value: 92, suffix: '%', label: 'Pose Extraction Accuracy' },
+    { value: 30, suffix: '%', label: 'Manual Analysis Reduction' },
+    { value: 'RAG', label: 'Production LLM Pipeline', sublabel: 'FastAPI + Vector DB' }
   ];
 
   return (
-    <section className="py-10 border-y border-[#1f1f23] bg-[#0a0a0b]">
+    <section className="py-12 border-y border-[#1f1f23] bg-[#0a0a0b]/60 relative z-10">
       <Container>
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-0 lg:divide-x lg:divide-[#1f1f23]">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           {metrics.map((metric, index) => (
-            <div key={index} className="flex flex-col items-center text-center px-8">
-              <div className="font-display text-4xl sm:text-5xl font-bold text-[#f0ece5]">
-                <AnimatedNumber 
-                  value={metric.value} 
-                  suffix={metric.suffix} 
-                  delay={index * 0.15} 
-                />
-              </div>
-              <div className="font-mono text-xs uppercase tracking-wider text-[#8a8a8e] mt-3">
-                {metric.label}
-              </div>
-              {metric.sublabel && (
-                <div className="font-mono text-[10px] text-[#555558] mt-1">
-                  {metric.sublabel}
+            <motion.div 
+              key={index} 
+              whileHover={{ y: -3, scale: 1.01 }}
+              transition={{ type: 'spring', stiffness: 350, damping: 25 }}
+              className="glass-card p-6 rounded-2xl flex flex-col justify-between border border-[#1f1f23] hover:border-[#3ecf8e]/40 transition-all duration-300 relative group overflow-hidden"
+            >
+              {/* Subtle top glow line */}
+              <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-[#3ecf8e]/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+              
+              <div>
+                <div className="font-mono text-[10px] uppercase tracking-widest text-[#3ecf8e] mb-2 font-semibold">
+                  METRIC // 0{index + 1}
                 </div>
-              )}
-            </div>
+                <div className="font-display text-4xl sm:text-5xl font-bold text-[#f0ece5] tracking-tight group-hover:text-gradient-emerald transition-all">
+                  <AnimatedNumber 
+                    value={metric.value} 
+                    suffix={metric.suffix} 
+                    delay={index * 0.15} 
+                  />
+                </div>
+              </div>
+
+              <div className="mt-4">
+                <div className="font-mono text-xs uppercase tracking-wider text-[#8a8a8e] group-hover:text-[#f0ece5] transition-colors">
+                  {metric.label}
+                </div>
+                {metric.sublabel && (
+                  <div className="font-mono text-[10px] text-[#555558] mt-1">
+                    {metric.sublabel}
+                  </div>
+                )}
+              </div>
+            </motion.div>
           ))}
         </div>
       </Container>

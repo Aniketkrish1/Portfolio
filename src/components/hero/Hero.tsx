@@ -76,53 +76,73 @@ export default function Hero() {
             initial="hidden"
             animate="visible"
           >
-            <motion.div variants={itemVariants} className="font-mono text-xs uppercase tracking-[0.3em] text-[#3ecf8e] mb-4">
+            {/* Live Status Indicator Pill */}
+            <motion.div variants={itemVariants} className="mb-6 inline-flex items-center gap-2.5 bg-[#111113]/90 border border-[#1f1f23] hover:border-[#3ecf8e]/40 px-3.5 py-1.5 rounded-full w-fit shadow-sm backdrop-blur-md">
+              <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#3ecf8e] opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-[#3ecf8e]"></span>
+              </span>
+              <span className="font-mono text-xs text-[#8a8a8e]">
+                Available for <span className="text-[#f0ece5] font-semibold">AI Infrastructure & Backend Systems</span>
+              </span>
+            </motion.div>
+            
+            <motion.div variants={itemVariants} className="font-mono text-xs uppercase tracking-[0.3em] text-[#3ecf8e] mb-3">
               AI SYSTEMS & INFRASTRUCTURE ENGINEER
             </motion.div>
             
-            <motion.div variants={itemVariants} className="font-display text-6xl sm:text-7xl lg:text-8xl font-bold text-[#f0ece5] tracking-tight leading-none mb-4">
-              ANIKET.
-            </motion.div>
+            <motion.h1 variants={itemVariants} className="font-display text-6xl sm:text-7xl lg:text-8xl font-bold text-[#f0ece5] tracking-tight leading-none mb-4">
+              ANIKET<span className="text-[#3ecf8e]">.</span>
+            </motion.h1>
 
-            <motion.div variants={itemVariants} className="font-mono text-sm text-[#3ecf8e] font-semibold tracking-wide mb-6">
-              Specialized in Backend Infrastructure, LLM Pipelines & Agentic Systems
+            <motion.div variants={itemVariants} className="font-mono text-sm sm:text-base text-[#3ecf8e] font-medium tracking-wide mb-6 max-w-xl">
+              Specialized in High-Performance Backend, LLM Pipelines & Agentic Infrastructure
             </motion.div>
             
-            <motion.div variants={itemVariants} className="text-base sm:text-lg text-[#8a8a8e] leading-relaxed max-w-lg mb-8">
-              Engineering production-grade AI systems, high-performance backend APIs, and multimodal signal pipelines.
-            </motion.div>
+            <motion.p variants={itemVariants} className="text-base sm:text-lg text-[#8a8a8e] leading-relaxed max-w-lg mb-8">
+              Architecting production-grade AI systems, ultra-fast async backends, and multimodal signal processing pipelines.
+            </motion.p>
             
             <motion.div variants={ctaVariants} className="flex flex-wrap items-center gap-3">
-              <a 
+              <motion.a 
+                whileHover={{ y: -2, scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                transition={{ type: 'spring', stiffness: 400, damping: 25 }}
                 href="#work"
                 onClick={scrollToWork}
-                className="inline-flex items-center gap-2 bg-[#3ecf8e] text-[#0a0a0b] px-5 py-2.5 font-semibold text-xs uppercase tracking-wider rounded-sm hover:bg-[#34b87d] transition-colors"
+                className="inline-flex items-center gap-2 bg-[#3ecf8e] text-[#0a0a0b] px-6 py-3 font-semibold text-xs uppercase tracking-wider rounded-full hover:bg-[#34b87d] transition-colors shadow-[0_0_20px_-3px_rgba(62,207,142,0.3)]"
               >
-                View Systems
-                <span>→</span>
-              </a>
-              <a 
+                Explore Systems
+                <span className="text-sm">→</span>
+              </motion.a>
+              <motion.a 
+                whileHover={{ y: -2, scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                transition={{ type: 'spring', stiffness: 400, damping: 25 }}
                 href="https://github.com/Aniketkrish1"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 border border-[#1f1f23] text-[#8a8a8e] px-4 py-2.5 text-xs font-mono rounded-sm hover:border-[#3ecf8e] hover:text-[#f0ece5] transition-colors"
+                className="inline-flex items-center gap-2 bg-[#111113] border border-[#1f1f23] text-[#8a8a8e] px-5 py-3 text-xs font-mono rounded-full hover:border-[#3ecf8e]/50 hover:text-[#f0ece5] transition-all"
               >
                 <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24">
                   <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
                 </svg>
                 GitHub
-              </a>
-              <a 
+              </motion.a>
+              <motion.a 
+                whileHover={{ y: -2, scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                transition={{ type: 'spring', stiffness: 400, damping: 25 }}
                 href="https://www.linkedin.com/in/aniketpatil11"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 border border-[#1f1f23] text-[#8a8a8e] px-4 py-2.5 text-xs font-mono rounded-sm hover:border-[#3ecf8e] hover:text-[#f0ece5] transition-colors"
+                className="inline-flex items-center gap-2 bg-[#111113] border border-[#1f1f23] text-[#8a8a8e] px-5 py-3 text-xs font-mono rounded-full hover:border-[#3ecf8e]/50 hover:text-[#f0ece5] transition-all"
               >
                 <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24">
                   <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
                 </svg>
                 LinkedIn
-              </a>
+              </motion.a>
             </motion.div>
           </motion.div>
           

@@ -42,13 +42,56 @@ body {
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-image: radial-gradient(circle at 1px 1px, #1f1f23 1px, transparent 0);
-  background-size: 24px 24px;
+  background-image: radial-gradient(circle at 1px 1px, rgba(31, 31, 35, 0.8) 1px, transparent 0);
+  background-size: 28px 28px;
 }
 
 ::selection {
   background-color: var(--accent);
   color: var(--primary-bg);
+}
+
+/* Glassmorphism & Glow Utilities */
+.glass-card {
+  background: rgba(17, 17, 19, 0.75);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
+}
+
+.glass-card:hover {
+  border-color: rgba(62, 207, 142, 0.35);
+  box-shadow: 0 0 25px -5px rgba(62, 207, 142, 0.12);
+}
+
+.emerald-glow-sm {
+  box-shadow: 0 0 15px -3px rgba(62, 207, 142, 0.25);
+}
+
+.emerald-glow-md {
+  box-shadow: 0 0 30px -5px rgba(62, 207, 142, 0.3);
+}
+
+.text-gradient-emerald {
+  background: linear-gradient(135deg, #f0ece5 30%, #3ecf8e 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+@keyframes pulse-emerald {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.4;
+    transform: scale(0.92);
+  }
+}
+
+.animate-pulse-emerald {
+  animation: pulse-emerald 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
 
 ::-webkit-scrollbar {
@@ -78,3 +121,4 @@ body {
     scroll-behavior: auto !important;
   }
 }
+

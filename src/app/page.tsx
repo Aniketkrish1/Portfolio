@@ -22,6 +22,15 @@ import CommandPalette from '@/components/ui/CommandPalette';
 import SectionLabel from '@/components/ui/SectionLabel';
 import { projects } from '@/lib/data/projects';
 
+import { 
+  VidBrainSimulator, 
+  MotionAnalysisSimulator, 
+  AuraSimulator, 
+  FieldEncryptorSimulator, 
+  AudioExtractorSimulator 
+} from '@/components/projects/InteractiveSimulators';
+import { InteractiveTerminal } from '@/components/ui/InteractiveTerminal';
+
 export default function Home() {
   const [activeSection, setActiveSection] = useState<string>('hero');
   const [isTraining, setIsTraining] = useState<boolean>(false);
@@ -95,7 +104,7 @@ export default function Home() {
           metrics={vidbrain.metrics}
           github={vidbrain.github}
         >
-          <VidBrainPipeline />
+          <VidBrainSimulator />
         </ProjectShowcase>
 
         {/* Project 02: 3D Motion Analysis */}
@@ -109,7 +118,7 @@ export default function Home() {
           github={motionAnalysis.github}
           reverse
         >
-          <MotionVisualization />
+          <MotionAnalysisSimulator />
         </ProjectShowcase>
 
         {/* Project 03: Adaptive Unified Response Assistant */}
@@ -122,7 +131,7 @@ export default function Home() {
           metrics={aura.metrics}
           github={aura.github}
         >
-          <AuraPipeline />
+          <AuraSimulator />
         </ProjectShowcase>
 
         {/* Project 04: Field Encryptor */}
@@ -136,7 +145,7 @@ export default function Home() {
           github={fieldEncryptor.github}
           reverse
         >
-          <FieldEncryptorPipeline />
+          <FieldEncryptorSimulator />
         </ProjectShowcase>
 
         {/* Project 05: Audio Subtitle Extractor */}
@@ -149,7 +158,7 @@ export default function Home() {
           metrics={audioExtractor.metrics}
           github={audioExtractor.github}
         >
-          <AudioExtractorPipeline />
+          <AudioExtractorSimulator />
         </ProjectShowcase>
       </section>
 
@@ -182,6 +191,7 @@ export default function Home() {
         onTrainingStateChange={(training) => setIsTraining(training)}
       />
       <CommandPalette onTriggerTrain={handleCommandTrain} />
+      <InteractiveTerminal />
     </main>
   );
 }
