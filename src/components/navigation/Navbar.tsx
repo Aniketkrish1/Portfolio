@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { playClickSound, toggleSound, isSoundEnabled } from '@/lib/utils/sound';
 
 const NAV_LINKS = [
   { id: 'experience', label: 'Experience' },
@@ -17,12 +18,13 @@ export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState<string>('');
+  const [audioActive, setAudioActive] = useState(true);
 
   useEffect(() => {
+    setAudioActive(isSoundEnabled());
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 50);
       
-      // Update active section based on scroll position
       const sections = NAV_LINKS.map(link => document.getElementById(link.id));
       const scrollPosition = window.scrollY + 100;
 
@@ -36,28 +38,24 @@ export default function Navbar() {
     };
 
     window.addEventListener('scroll', handleScroll);
-    handleScroll(); // Initial check
+    handleScroll();
 
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  useEffect(() => {
-    if (isMobileMenuOpen) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = 'unset';
-    }
-    return () => {
-      document.body.style.overflow = 'unset';
-    };
-  }, [isMobileMenuOpen]);
-
   const handleNavClick = (id: string) => {
+    playClickSound(900, 0.02);
     setIsMobileMenuOpen(false);
     const element = document.getElementById(id);
     if (element) {
       element.scrollIntoView({ behavior: 'smooth' });
     }
+  };
+
+  const handleSoundToggle = () => {
+    const newState = toggleSound();
+    setAudioActive(newState);
+    if (newState) playClickSound(1200, 0.04);
   };
 
   const GitHubIcon = () => (
@@ -98,29 +96,65 @@ export default function Navbar() {
           </div>
 
           {/* Desktop Nav */}
-          <nav className="hidden md:flex items-center space-x-8">
-            <div className="flex items-center space-x-6">
-              {NAV_LINKS.map((link) => (
-                <button
-                  key={link.id}
-                  onClick={() => handleNavClick(link.id)}
-                  className={`font-mono text-xs uppercase tracking-widest transition-colors duration-200 ${
-                    activeSection === link.id
-                      ? 'text-[#3ecf8e]'
-                      : 'text-[#8a8a8e] hover:text-[#f0ece5]'
-                  }`}
-                >
-                  {link.label}
-                </button>
-              ))}
+          <nav className="hidden md:flex items-center space-x-6">
+            <div className="flex items-center space-x-1 bg-[#111113]/80 p-1.5 rounded-full border border-[#1f1f23] backdrop-blur-md">
+              {NAV_LINKS.map((link) => {
+                const isActive = activeSection === link.id;
+                return (
+                  <button
+                    key={link.id}
+                    onClick={() => handleNavClick(link.id)}
+                    className={`relative px-4 py-1.5 font-mono text-xs uppercase tracking-wider transition-colors duration-200 rounded-full ${
+                      isActive ? 'text-[#0a0a0b] font-bold' : 'text-[#8a8a8e] hover:text-[#f0ece5]'
+                    }`}
+                  >
+                    {isActive && (
+                      <motion.div
+                        layoutId="activeNavTab"
+                        className="absolute inset-0 bg-[#3ecf8e] rounded-full z-0"
+                        transition={{ type: 'spring', stiffness: 380, damping: 28 }}
+                      />
+                    )}
+                    <span className="relative z-10">{link.label}</span>
+                  </button>
+                );
+              })}
             </div>
 
-            <div className="flex items-center space-x-4 border-l border-[#1f1f23] pl-6">
+            {/* Command Palette Trigger Pill */}
+            <button
+              onClick={() => {
+                playClickSound(800, 0.02);
+                const event = new KeyboardEvent('keydown', { key: 'k', metaKey: true });
+                window.dispatchEvent(event);
+              }}
+              className="inline-flex items-center gap-2 bg-[#111113] hover:bg-[#1a1a1d] border border-[#1f1f23] hover:border-[#3ecf8e]/40 px-3 py-1.5 rounded-full text-xs font-mono text-[#8a8a8e] hover:text-[#f0ece5] transition-all group"
+            >
+              <span>Search</span>
+              <kbd className="bg-[#1f1f23] text-[#3ecf8e] px-1.5 py-0.5 rounded text-[10px] font-mono group-hover:bg-[#3ecf8e] group-hover:text-[#0a0a0b] transition-colors">
+                ⌘K
+              </kbd>
+            </button>
+
+            {/* Audio Feedback Synthesizer Toggle */}
+            <button
+              onClick={handleSoundToggle}
+              title="Toggle Micro-Interaction Audio Synthesizer"
+              className={`p-2 rounded-full border text-xs transition-all ${
+                audioActive
+                  ? 'bg-[#3ecf8e]/10 border-[#3ecf8e]/40 text-[#3ecf8e]'
+                  : 'bg-[#111113] border-[#1f1f23] text-[#555558]'
+              }`}
+            >
+              {audioActive ? '🔊' : '🔇'}
+            </button>
+
+            <div className="flex items-center space-x-3 border-l border-[#1f1f23] pl-4">
               <a
                 href={GITHUB_URL}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-[#8a8a8e] hover:text-[#f0ece5] transition-colors"
+                className="p-2 rounded-full text-[#8a8a8e] hover:text-[#f0ece5] hover:bg-[#1f1f23] transition-all"
                 aria-label="GitHub"
               >
                 <GitHubIcon />
@@ -129,19 +163,20 @@ export default function Navbar() {
                 href={LINKEDIN_URL}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-[#8a8a8e] hover:text-[#f0ece5] transition-colors"
+                className="p-2 rounded-full text-[#8a8a8e] hover:text-[#f0ece5] hover:bg-[#1f1f23] transition-all"
                 aria-label="LinkedIn"
               >
                 <LinkedInIcon />
               </a>
             </div>
-              <a
-                href="#contact"
-                onClick={(e) => { e.preventDefault(); handleNavClick('contact'); }}
-                className="ml-4 inline-flex items-center gap-2 bg-[#3ecf8e]/10 border border-[#3ecf8e]/30 text-[#3ecf8e] px-5 py-2 text-xs font-mono uppercase tracking-wider rounded-full hover:bg-[#3ecf8e]/20 hover:border-[#3ecf8e]/50 transition-all"
-              >
-                Let&apos;s Connect
-              </a>
+
+            <a
+              href="#contact"
+              onClick={(e) => { e.preventDefault(); handleNavClick('contact'); }}
+              className="inline-flex items-center gap-2 bg-[#3ecf8e]/10 border border-[#3ecf8e]/30 text-[#3ecf8e] px-4 py-2 text-xs font-mono uppercase tracking-wider rounded-full hover:bg-[#3ecf8e] hover:text-[#0a0a0b] hover:border-[#3ecf8e] transition-all shadow-[0_0_15px_-3px_rgba(62,207,142,0.15)]"
+            >
+              Let&apos;s Connect
+            </a>
           </nav>
 
           {/* Mobile Menu Button */}

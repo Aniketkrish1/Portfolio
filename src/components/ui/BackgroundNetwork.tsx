@@ -28,6 +28,7 @@ interface BackgroundNetworkProps {
 export default function BackgroundNetwork({ activeSection, isTraining }: BackgroundNetworkProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const prefersReducedMotion = useReducedMotion();
+  const mouseRef = useRef<{ x: number; y: number }>({ x: -1000, y: -1000 });
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -36,33 +37,46 @@ export default function BackgroundNetwork({ activeSection, isTraining }: Backgro
     if (!ctx) return;
 
     let animationFrameId: number;
-    let width = (canvas.width = window.innerWidth);
-    let height = (canvas.height = window.innerHeight);
+    let dpr = window.devicePixelRatio || 1;
+    let width = (canvas.width = window.innerWidth * dpr);
+    let height = (canvas.height = window.innerHeight * dpr);
+    ctx.scale(dpr, dpr);
 
     const handleResize = () => {
       if (!canvas) return;
-      width = canvas.width = window.innerWidth;
-      height = canvas.height = window.innerHeight;
+      dpr = window.devicePixelRatio || 1;
+      width = canvas.width = window.innerWidth * dpr;
+      height = canvas.height = window.innerHeight * dpr;
+      ctx.scale(dpr, dpr);
+    };
+
+    const handleMouseMove = (e: MouseEvent) => {
+      mouseRef.current = { x: e.clientX, y: e.clientY };
+    };
+
+    const handleMouseLeave = () => {
+      mouseRef.current = { x: -1000, y: -1000 };
     };
 
     window.addEventListener('resize', handleResize);
+    window.addEventListener('mousemove', handleMouseMove);
+    document.addEventListener('mouseleave', handleMouseLeave);
 
-    // Initialize 35 lightweight particles
-    const particleCount = 35;
+    // Initialize 40 crisp particles
+    const particleCount = 40;
     const particles: Particle[] = Array.from({ length: particleCount }, () => ({
-      x: Math.random() * width,
-      y: Math.random() * height,
-      vx: (Math.random() - 0.5) * 0.4,
-      vy: (Math.random() - 0.5) * 0.4,
-      radius: Math.random() * 1.5 + 1,
+      x: Math.random() * window.innerWidth,
+      y: Math.random() * window.innerHeight,
+      vx: (Math.random() - 0.5) * 0.45,
+      vy: (Math.random() - 0.5) * 0.45,
+      radius: Math.random() * 1.5 + 1.2,
     }));
 
     const signalPulses: SignalPulse[] = [];
 
-    // Helper to spawn signal pulses
     const maybeSpawnPulse = (speedMult: number) => {
-      if (particles.length < 2 || signalPulses.length > 8) return;
-      if (Math.random() < 0.05 * speedMult) {
+      if (particles.length < 2 || signalPulses.length > 10) return;
+      if (Math.random() < 0.06 * speedMult) {
         const from = Math.floor(Math.random() * particles.length);
         let to = Math.floor(Math.random() * particles.length);
         if (from !== to) {
@@ -70,47 +84,59 @@ export default function BackgroundNetwork({ activeSection, isTraining }: Backgro
             fromIndex: from,
             toIndex: to,
             progress: 0,
-            speed: (0.01 + Math.random() * 0.02) * speedMult,
+            speed: (0.012 + Math.random() * 0.02) * speedMult,
           });
         }
       }
     };
 
     const render = () => {
-      ctx.clearRect(0, 0, width, height);
+      ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
 
-      // Determine parameters based on active section & training state
       let speedMult = isTraining ? 3.5 : 1;
-      let connectionDistance = isTraining ? 160 : 120;
-      let lineAlphaBase = isTraining ? 0.25 : 0.12;
+      let connectionDistance = isTraining ? 170 : 130;
+      let lineAlphaBase = isTraining ? 0.28 : 0.14;
 
       if (activeSection === 'systems') {
-        connectionDistance = 140;
-        lineAlphaBase = 0.18;
+        connectionDistance = 150;
+        lineAlphaBase = 0.2;
       } else if (activeSection === 'work') {
         speedMult = isTraining ? 3.5 : 1.3;
-        lineAlphaBase = 0.15;
+        lineAlphaBase = 0.16;
       } else if (activeSection === 'contact') {
-        lineAlphaBase = 0.2;
+        lineAlphaBase = 0.22;
       }
 
-      // Update and draw particles
+      const mouse = mouseRef.current;
+
+      // Update & render particles with subtle mouse magnetism
       particles.forEach((p, i) => {
         if (!prefersReducedMotion) {
+          // Mouse magnetism force
+          const dxMouse = mouse.x - p.x;
+          const dyMouse = mouse.y - p.y;
+          const mouseDist = Math.sqrt(dxMouse * dxMouse + dyMouse * dyMouse);
+          
+          if (mouseDist < 160) {
+            const force = (1 - mouseDist / 160) * 0.8;
+            p.x += (dxMouse / mouseDist) * force;
+            p.y += (dyMouse / mouseDist) * force;
+          }
+
           p.x += p.vx * speedMult;
           p.y += p.vy * speedMult;
 
-          if (p.x < 0 || p.x > width) p.vx *= -1;
-          if (p.y < 0 || p.y > height) p.vy *= -1;
+          if (p.x < 0 || p.x > window.innerWidth) p.vx *= -1;
+          if (p.y < 0 || p.y > window.innerHeight) p.vy *= -1;
         }
 
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
-        ctx.fillStyle = isTraining ? '#3ecf8e' : '#555558';
-        ctx.globalAlpha = isTraining ? 0.8 : 0.4;
+        ctx.fillStyle = isTraining ? '#3ecf8e' : '#3ecf8e';
+        ctx.globalAlpha = isTraining ? 0.85 : 0.45;
         ctx.fill();
 
-        // Connect nearby particles
+        // Draw connections
         for (let j = i + 1; j < particles.length; j++) {
           const p2 = particles[j];
           const dx = p2.x - p.x;
@@ -122,7 +148,7 @@ export default function BackgroundNetwork({ activeSection, isTraining }: Backgro
             ctx.beginPath();
             ctx.moveTo(p.x, p.y);
             ctx.lineTo(p2.x, p2.y);
-            ctx.strokeStyle = isTraining ? '#3ecf8e' : '#3ecf8e';
+            ctx.strokeStyle = '#3ecf8e';
             ctx.globalAlpha = alpha;
             ctx.lineWidth = isTraining ? 1.2 : 0.8;
             ctx.stroke();
@@ -130,7 +156,7 @@ export default function BackgroundNetwork({ activeSection, isTraining }: Backgro
         }
       });
 
-      // Update & render signal pulses moving between connected nodes
+      // Signal pulses
       maybeSpawnPulse(speedMult);
 
       for (let i = signalPulses.length - 1; i >= 0; i--) {
@@ -138,34 +164,37 @@ export default function BackgroundNetwork({ activeSection, isTraining }: Backgro
         const p1 = particles[pulse.fromIndex];
         const p2 = particles[pulse.toIndex];
 
-        if (p1 && p2) {
-          pulse.progress += pulse.speed;
-          const px = p1.x + (p2.x - p1.x) * pulse.progress;
-          const py = p1.y + (p2.y - p1.y) * pulse.progress;
-
-          ctx.beginPath();
-          ctx.arc(px, py, isTraining ? 2.5 : 1.8, 0, Math.PI * 2);
-          ctx.fillStyle = '#3ecf8e';
-          ctx.globalAlpha = isTraining ? 0.9 : 0.7;
-          ctx.fill();
+        if (!p1 || !p2) {
+          signalPulses.splice(i, 1);
+          continue;
         }
+
+        pulse.progress += pulse.speed;
 
         if (pulse.progress >= 1) {
           signalPulses.splice(i, 1);
+          continue;
         }
+
+        const currentX = p1.x + (p2.x - p1.x) * pulse.progress;
+        const currentY = p1.y + (p2.y - p1.y) * pulse.progress;
+
+        ctx.beginPath();
+        ctx.arc(currentX, currentY, isTraining ? 2.5 : 1.8, 0, Math.PI * 2);
+        ctx.fillStyle = '#3ecf8e';
+        ctx.globalAlpha = 0.9;
+        ctx.fill();
       }
 
-      ctx.globalAlpha = 1;
-
-      if (!prefersReducedMotion) {
-        animationFrameId = requestAnimationFrame(render);
-      }
+      animationFrameId = requestAnimationFrame(render);
     };
 
     render();
 
     return () => {
       window.removeEventListener('resize', handleResize);
+      window.removeEventListener('mousemove', handleMouseMove);
+      document.removeEventListener('mouseleave', handleMouseLeave);
       cancelAnimationFrame(animationFrameId);
     };
   }, [activeSection, isTraining, prefersReducedMotion]);
@@ -173,7 +202,7 @@ export default function BackgroundNetwork({ activeSection, isTraining }: Backgro
   return (
     <canvas
       ref={canvasRef}
-      className="fixed inset-0 pointer-events-none z-0 transition-opacity duration-700"
+      className="fixed inset-0 pointer-events-none z-0 transition-opacity duration-700 opacity-60"
       style={{ opacity: isTraining ? 0.85 : 0.45 }}
     />
   );

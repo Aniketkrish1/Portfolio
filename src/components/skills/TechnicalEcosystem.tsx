@@ -48,19 +48,30 @@ export function TechnicalEcosystem() {
   };
 
   return (
-    <section id="systems" className="py-16 lg:py-20">
+    <section id="systems" className="py-20 relative z-10">
       <Container>
         <Reveal>
-          <SectionLabel label="Technical Ecosystem" />
-          <h2 className="font-display text-3xl sm:text-4xl font-bold text-[#f0ece5] mt-4 mb-10">
-            Technologies I Work With
-          </h2>
+          <div className="mb-12">
+            <SectionLabel label="Engineering Stack" />
+            <h2 className="font-display text-3xl sm:text-5xl font-bold text-[#f0ece5] mt-4 tracking-tight">
+              Technical Ecosystem
+            </h2>
+            <p className="font-mono text-xs text-[#8a8a8e] mt-2">
+              Hover any technology to reveal interconnected AI pipeline & infrastructure dependencies.
+            </p>
+          </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 sm:gap-10">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {ecosystems.map((eco, index) => (
-              <div key={index} className="p-6 sm:p-8 rounded-xl bg-[#111113]/80 border border-[#1f1f23] hover:border-[#3ecf8e]/40 transition-colors duration-300">
-                <h3 className="font-mono text-xs text-[#3ecf8e] uppercase tracking-wider mb-5 flex items-center gap-2">
-                  <span className="w-1.5 h-1.5 rounded-full bg-[#3ecf8e]" />
+              <div 
+                key={index} 
+                className="glass-card p-8 rounded-3xl border border-[#1f1f23] hover:border-[#3ecf8e]/40 transition-all duration-300 relative group overflow-hidden"
+              >
+                {/* Glow line indicator */}
+                <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-[#3ecf8e]/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                
+                <h3 className="font-mono text-xs text-[#3ecf8e] uppercase tracking-wider mb-6 flex items-center gap-2 font-semibold">
+                  <span className="w-2 h-2 rounded-full bg-[#3ecf8e] shadow-[0_0_8px_#3ecf8e]" />
                   {eco.category}
                 </h3>
                 <div className="flex flex-wrap gap-2.5">
@@ -73,12 +84,12 @@ export function TechnicalEcosystem() {
                         key={tech}
                         onMouseEnter={() => setHoveredTech(tech)}
                         onMouseLeave={() => setHoveredTech(null)}
-                        className={`font-mono text-xs px-3.5 py-1.5 bg-[#1a1a1d] border rounded-md transition-all duration-300 cursor-default ${
+                        className={`font-mono text-xs px-4 py-2 rounded-full border transition-all duration-200 cursor-pointer select-none ${
                           isSelf
-                            ? 'border-[#3ecf8e] text-[#f0ece5] bg-[#3ecf8e]/10 shadow-[0_0_12px_rgba(62,207,142,0.3)] scale-105'
+                            ? 'border-[#3ecf8e] text-[#0a0a0b] bg-[#3ecf8e] shadow-[0_0_16px_rgba(62,207,142,0.4)] scale-105 font-bold'
                             : active
-                            ? 'border-[#3ecf8e]/40 text-[#f0ece5] opacity-100'
-                            : 'border-[#26262b] text-[#8a8a8e] opacity-35'
+                            ? 'border-[#3ecf8e]/40 text-[#f0ece5] bg-[#111113]/90 hover:border-[#3ecf8e]'
+                            : 'border-[#1f1f23] text-[#555558] bg-[#0a0a0b]/50 opacity-30'
                         }`}
                       >
                         {tech}
